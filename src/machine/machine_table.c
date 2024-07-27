@@ -36,6 +36,8 @@
 #include <86box/thread.h>
 #include <86box/timer.h>
 #include <86box/network.h>
+/* For the PL4600C I needed to add the sio.h to enable the UM8663AF SIO device */
+#include <86box/sio.h>
 
 // Temporarily here till we move everything out into the right files
 extern const device_t pcjr_device;
@@ -8306,6 +8308,46 @@ const machine_t machines[] = {
         .sio_device = NULL,
         .vid_device = NULL,
         .snd_device = NULL,
+        .net_device = NULL
+    },
+    /* This is the Compaq Presario 7106 test of conan7123 - first tests */
+    {
+        .name = "[UMC 8881] Compaq Presario 71xx - MiTAC/Trigon PL4600C",
+        .internal_name = "pl4600c",
+        .type = MACHINE_TYPE_486_S3,
+        .chipset = MACHINE_CHIPSET_UMC_UM8881,
+        .init = machine_at_pl4600c_init,
+        .p1_handler = NULL,
+        .gpio_handler = NULL,
+        .available_flag = MACHINE_AVAILABLE,
+        .gpio_acpi_handler = NULL,
+        .cpu = {
+            .package = CPU_PKG_SOCKET3,
+            .block = CPU_BLOCK_NONE,
+            .min_bus = 0,
+            .max_bus = 0,
+            .min_voltage = 0,
+            .max_voltage = 0,
+            .min_multi = 0,
+            .max_multi = 0
+        },
+        .bus_flags = MACHINE_PCI,
+        .flags = MACHINE_IDE_DUAL | MACHINE_APM,
+        .ram = {
+            .min = 1024,
+            .max = 65536,
+            .step = 1024
+        },
+        .nvrmask = 255,
+        .kbc_device = NULL,
+        .kbc_p1 = 0xff,
+        .gpio = 0xffffffff,
+        .gpio_acpi = 0xffffffff,
+        .device = NULL,
+        .fdc_device = NULL,
+        .sio_device = &um8663af_device,
+        .vid_device = &gd5430_onboard_vlb_device,
+        .snd_device = &ess_1688_device,
         .net_device = NULL
     },
     /* This has the UMC 88xx on-chip KBC. */
